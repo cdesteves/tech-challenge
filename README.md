@@ -55,7 +55,7 @@ To configure it, run the following command:
 minikube addons configure registry-creds
 ```
 
-# 052020821647 eu-west-1
+# 052020821647 eu-west-1 -> aws configure no runner
 Fill de AWS ECR with your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and then enable it via: 
 ```bash
 minikube addons enable registry-creds
