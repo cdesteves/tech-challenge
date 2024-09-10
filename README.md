@@ -28,11 +28,11 @@ Before you can run this project locally or interact with the GitHub Actions CI/C
 
 ## Project Setup
 
-## Clone the Repository
+## Fork the Repository
 
-```bash
-git clone https://github.com/cdesteves/tech-challenge.git && cd tech-challenge
-```
+In order to add your own secrets and self-hosted runner, there is the need to fork this repository: 
+
+![Fork](images/fork.png)
 
 ## Minikube Setup
 To deploy the application to your local Kubernetes cluster, start Minikube:
@@ -42,7 +42,7 @@ To deploy the application to your local Kubernetes cluster, start Minikube:
 minikube start
 ```
 
-## Add ECR credentials
+## ECR credentials
 
 There is the need to add your ECR credentials on:
 
@@ -54,10 +54,42 @@ To configure it, run the following command:
  ```bash
 minikube addons configure registry-creds
 ```
-Fill de AWS ECR with your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and then enable it via: 
+Configure registry-creds with the your details for AWS ECR: 
+
+  - **AWS_ACCESS_KEY_ID**
+  - **AWS_SECRET_ACCESS_KEY**
+  - **AWS_REGION**
+  - **AWS_ACCOUNT**
+
+Afterwards, enable it via: 
 ```bash
 minikube addons enable registry-creds
 ```
+##  Self-hosted runner
+
+To configure the self-hosted runner, head to "Actions", followed by "Runners" and  add a "new runner" as shows: 
+
+![New Self-hosted runner](images/runner.png)
+
+From there press again "new self-hosted runner" and you will be prompt with the GitHub tutorial. 
+
+After following all steps, run the final command to start the runner that should be idle and waiting for jobs, like so: 
+
+![Self-hosted runner](images/runner-idle.png)
+
+
+### Configre AWS CLI
+
+As the GitHub runner will be self-hosted for this scenario, there is the need to configure AWS CLI with the credentials that the runner will need to access ECR. 
+
+For this, run: 
+
+```bash
+aws configure
+```
+
+And enter the desired credentials. Note that these should have permissions to interact with ECR. 
+
 
 ## CI/CD Pipeline
 The GitHub Actions workflow is set up to automate the following steps:
@@ -66,7 +98,9 @@ The GitHub Actions workflow is set up to automate the following steps:
 2. Push: Pushes the Docker image to AWS ECR.
 3. Deploy: Uses Helm to deploy the application to the Kubernetes cluster running on Minikube.
 
-The workflow is triggered on any push to the repository. To set up the secrets for AWS ECR, you need to add the following GitHub Secrets:
+The workflow is triggered on any push to the repository. 
+
+To set up the secrets for AWS ECR, you need to add the following GitHub Secrets:
 
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
@@ -82,52 +116,24 @@ The GitHub Actions pipeline (.github/workflows/main.yml) performs the following 
 - Push: Pushes the image to ECR.
 - Deploy: Uses Helm to deploy the application to the Minikube cluster.
 
-## Accessing the Application
+
+## Deploying
+
+After having all pre-requisites and configuring the above points, this can be triggered by simply pushing any change to the repository. 
+
+The Self-hosted runner will update the ECR image and afterwards deploy using helm into the minikube cluster. 
+
+### Accessing the Application
+
 Once the application is deployed to the Kubernetes cluster, you can access it by using the Minikube IP and the service’s NodePort:
 
-bash
-Copy code
-minikube service nginx-app
+```bash
+minikube service lgc --url --namespace lgc
+```
 This will open the web application in your default browser.
 
-## Customization
-You can modify the index.html file to change the content of the NGINX welcome page. The file is located in the root directory and will be copied into the NGINX container during the Docker build process.
 
 ## Enhancements
-Blue-Green or Canary Deployments
-The Helm chart can be extended to support blue-green or canary deployment strategies. For example, you can define multiple Helm values files to manage different versions of the deployment and use Helm hooks to orchestrate the switch between deployments.
 
 Monitoring and Logging
 For monitoring and logging, tools like Prometheus and Grafana can be installed in the Minikube cluster. This can help monitor the health and performance of your deployed application.
-
-## Troubleshooting
-Minikube Issues: If Minikube fails to start, ensure that Docker Desktop is running and WSL is properly configured.
-Helm Deployment: If the Helm deployment fails, check that all Kubernetes resources are correctly configured and that Minikube is running.
-ECR Authentication: Ensure that AWS credentials are correctly stored in GitHub Secrets and that the repository permissions are set up for pushing images.
-Conclusion
-This project showcases a simple CI/CD pipeline for deploying a web application to a local Kubernetes cluster using GitHub Actions, Helm, and AWS ECR. The pipeline automates building, pushing, and deploying the Docker image, while the Helm chart manages the Kubernetes resources.
-
-markdown
-Copy code
-
-### Key Sections Breakdown:
-
-- **Overview**: High-level introduction of the project.
-- **Technologies Used**: Tools used in the project.
-- **Project Setup**: Detailed instructions on how to run the project locally.
-- **CI/CD Pipeline**: Information about the GitHub Actions workflow and the steps it automates.
-- **Customizations & Enhancements**: Ideas for further improvement.
-- **Troubleshooting**: Common issues and their fixes.
-
-Feel free to adapt or modify it based on your preferences!
-
-### 2. Docker Image
-This project uses an NGINX Docker image with a custom index.html file that simulates an application. The Docker image is built as part of the CI pipeline and pushed to AWS ECR.
-
-To build and run the Docker image locally:
-
-bash
-Copy code
-docker build -t my-nginx-app:latest .
-docker run -p 8080:80 my-nginx-app:latest
-You can now view the web application by navigating to http://localhost:8080.
