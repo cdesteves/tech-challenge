@@ -44,17 +44,18 @@ minikube start
 
 ## ECR credentials
 
-There is the need to add your ECR credentials on:
+You need to configure your ECR credentials in the following locations:
 
   - **GitHub Secrets**: so that the pipeline is able to push the new image to the repository.
   - **minikube**: so that the cluster is able to retreive the docker image. 
 
-The credentials on minikube were added using a minikube addon. 
+In Minikube, the credentials are configured using the registry-creds addon.
+
 To configure it, run the following command: 
  ```bash
 minikube addons configure registry-creds
 ```
-Configure registry-creds with the your details for AWS ECR: 
+Configure the registry-creds addon with the your details for AWS ECR: 
 
   - **AWS_ACCESS_KEY_ID**
   - **AWS_SECRET_ACCESS_KEY**
@@ -67,11 +68,11 @@ minikube addons enable registry-creds
 ```
 ##  Self-hosted runner
 
-To configure the self-hosted runner, head to "Actions", followed by "Runners" and  add a "new runner" as shows: 
+To configure the self-hosted runner, navigate to "Actions" in your GitHub repository, then select "Runners", and click "New runner". Follow the on-screen instructions:
 
 ![New Self-hosted runner](images/runner.png)
 
-From there press again "new self-hosted runner" and you will be prompt with the GitHub tutorial. 
+From there, select "new self-hosted runner" and you will be prompt with the GitHub tutorial. 
 
 After following all steps, run the final command to start the runner that should be idle and waiting for jobs, like so: 
 
@@ -80,7 +81,7 @@ After following all steps, run the final command to start the runner that should
 
 ### Configre AWS CLI
 
-As the GitHub runner will be self-hosted for this scenario, there is the need to configure AWS CLI with the credentials that the runner will need to access ECR. 
+Since we are using a self-hosted GitHub runner, you need to configure the AWS CLI with appropriate credentials that the runner will use to interact with ECR.
 
 For this, run: 
 
@@ -98,7 +99,7 @@ The GitHub Actions workflow is set up to automate the following steps:
 2. Push: Pushes the Docker image to AWS ECR.
 3. Deploy: Uses Helm to deploy the application to the Kubernetes cluster running on Minikube.
 
-The workflow is triggered on any push to the repository. 
+The workflow is triggered automatically on every code push to the repository. 
 
 To set up the secrets for AWS ECR, you need to add the following GitHub Secrets:
 
@@ -119,7 +120,7 @@ The GitHub Actions pipeline (.github/workflows/main.yml) performs the following 
 
 ## Deploying
 
-After having all pre-requisites and configuring the above points, this can be triggered by simply pushing any change to the repository. 
+Once all prerequisites are installed and configured, you can trigger the pipeline by pushing any code change to the repository. 
 
 The Self-hosted runner will update the ECR image and afterwards deploy using helm into the minikube cluster. 
 
@@ -135,5 +136,5 @@ This will open the web application in your default browser.
 
 ## Enhancements
 
-Monitoring and Logging
+### Monitoring and Logging
 For monitoring and logging, tools like Prometheus and Grafana can be installed in the Minikube cluster. This can help monitor the health and performance of your deployed application.
