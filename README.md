@@ -44,7 +44,7 @@ minikube start
 
 ## ECR credentials
 
-You need to configure your ECR credentials in the following locations:
+Configure your ECR credentials in the following locations:
 
   - **GitHub Secrets**: so that the pipeline is able to push the new image to the repository.
   - **minikube**: so that the cluster is able to retreive the docker image. 
