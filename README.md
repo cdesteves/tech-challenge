@@ -32,7 +32,7 @@ Before you can run this project locally or interact with the GitHub Actions CI/C
 
 In order to add your own secrets and self-hosted runner, there is the need to fork this repository: 
 
-[Fork](images/fork.png)
+![Fork](images/fork.png)
 
 ## Minikube Setup
 To deploy the application to your local Kubernetes cluster, start Minikube:
@@ -69,13 +69,13 @@ minikube addons enable registry-creds
 
 To configure the self-hosted runner, head to "Actions", followed by "Runners" and  add a "new runner" as shows: 
 
-[New Self-hosted runner](images/runner.png)
+![New Self-hosted runner](images/runner.png)
 
 From there press again "new self-hosted runner" and you will be prompt with the GitHub tutorial. 
 
 After following all steps, run the final command to start the runner that should be idle and waiting for jobs, like so: 
 
-[Self-hosted runner](images/runner-idle.png)
+![Self-hosted runner](images/runner-idle.png)
 
 
 ### Configre AWS CLI
@@ -128,16 +128,12 @@ The Self-hosted runner will update the ECR image and afterwards deploy using hel
 Once the application is deployed to the Kubernetes cluster, you can access it by using the Minikube IP and the service’s NodePort:
 
 ```bash
-minikube service lgc
+minikube service lgc --url
 ```
 This will open the web application in your default browser.
 
-## Customization
-You can modify the index.html file to change the content of the NGINX welcome page. The file is located in the root directory and will be copied into the NGINX container during the Docker build process.
 
 ## Enhancements
-Blue-Green or Canary Deployments
-The Helm chart can be extended to support blue-green or canary deployment strategies. For example, you can define multiple Helm values files to manage different versions of the deployment and use Helm hooks to orchestrate the switch between deployments.
 
 Monitoring and Logging
 For monitoring and logging, tools like Prometheus and Grafana can be installed in the Minikube cluster. This can help monitor the health and performance of your deployed application.
