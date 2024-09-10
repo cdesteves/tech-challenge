@@ -128,7 +128,7 @@ The Self-hosted runner will update the ECR image and afterwards deploy using hel
 Once the application is deployed to the Kubernetes cluster, you can access it by using the Minikube IP and the service’s NodePort:
 
 ```bash
-minikube service lgc --url
+minikube service lgc --url --namespace lgc
 ```
 This will open the web application in your default browser.
 
