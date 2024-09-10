@@ -1,4 +1,4 @@
-# LetsGetChecked DevOps Challenge:
+# DevOps Challenge:
 
 ## Overview
 
