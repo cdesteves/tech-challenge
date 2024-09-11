@@ -8,7 +8,7 @@ image:
   repository: "" # Overwritten by github secret
   pullPolicy: Always # Used for convenience
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 2
 
 imagePullSecrets: [name: awsecr-cred]
 nameOverride: ""
